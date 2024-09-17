@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# backward compat since cached function went away
+# https://pagure.io/rpkg-util/c/bb62554c62fd52224709e861c2353a5c15b50220?branch=master
+function cached {
+  declare v=${OUTPUT[$1]}
+  [[ -n $v ]] && echo -n "$v"
+}
+
+function neovim_dev_version {
+  cached neovim_dev_version && return
+
+  declare version
+  version=$(awk '$1=="project" && $3=="VERSION"{print $4;exit}' < CMakeLists.txt)
+  [[ -n $version ]] || abort "failed VERSION from CMakeLists.txt"
+
+  # git describe --first-parent origin/master
+  # v0.4.0-1080-g971e0ca90
+  declare describe tag commits hash
+  describe=$(git describe --first-parent --long origin/master)
+  read tag commits hash <<<"${describe//-/ }"
+  [[ $tag == v* && $commits =~ ^[0-9]+$ && -n $hash ]] || abort "failed git describe"
+
+  output "$versionv$major.$minor.$patch$pre+$commits-$hash"
+}
+
+function git_version {
+  cached git_version && return
+
+  declare version
+  version=$(awk '$1=="project" && $3=="VERSION"{print $4;exit}' < CMakeLists.txt)
+  [[ -n $version ]] || abort "failed VERSION from CMakeLists.txt"
+
+  # v0.4.0-1080-g971e0ca90
+  declare describe tag commits hash
+  describe=$(git describe --tags --first-parent --long origin/master)
+  read tag commits hash <<<"${describe//-/ }"
+  [[ $tag == v* && $commits =~ ^[0-9]+$ && -n $hash ]] || abort "failed git describe"
+
+  output "$version~git.$commits.$hash"
+}
+
+function git_revision {
+  cached git_revision && return
+
+  # find last merge
+  declare last_merge rest
+  read last_merge rest <<<"$(git log --merges --oneline -n1)"
+  [[ -n $last_merge ]] || abort "failed to find last merge"
+
+  # count commits since last merge, might be zero
+  declare count
+  count=$(git log --oneline HEAD "^$last_merge" | wc -l)
+
+  output "$((count + 1))"
+}
+
+function git_changelog_date {
+  cached git_changelog_date && return
+  output "$(date +'%a %b %d %Y')"
+}
+
+function git_changelog_version {
+  cached git_changelog_version && return
+  git_version &>/dev/null  # cache
+  git_revision &>/dev/null # cache
+  output "$(git_version)-$(git_revision)"
+}
+
+function abort {
+  echo "ABORT: $*" >&2
+  exit 1
+}
