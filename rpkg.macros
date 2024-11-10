@@ -7,23 +7,6 @@ function cached {
   [[ -n $v ]] && echo -n "$v"
 }
 
-function neovim_dev_version {
-  cached neovim_dev_version && return
-
-  declare version
-  version=$(awk '$1=="project" && $3=="VERSION"{print $4;exit}' < CMakeLists.txt)
-  [[ -n $version ]] || abort "failed VERSION from CMakeLists.txt"
-
-  # git describe --first-parent origin/master
-  # v0.4.0-1080-g971e0ca90
-  declare describe tag commits hash
-  describe=$(git describe --first-parent --long origin/master)
-  read tag commits hash <<<"${describe//-/ }"
-  [[ $tag == v* && $commits =~ ^[0-9]+$ && -n $hash ]] || abort "failed git describe"
-
-  output "$versionv$major.$minor.$patch$pre+$commits-$hash"
-}
-
 function git_version {
   cached git_version && return
 
@@ -37,7 +20,7 @@ function git_version {
   read tag commits hash <<<"${describe//-/ }"
   [[ $tag == v* && $commits =~ ^[0-9]+$ && -n $hash ]] || abort "failed git describe"
 
-  output "$version~git.$commits.$hash"
+  output "$version+git.$commits.$hash"
 }
 
 function git_revision {
