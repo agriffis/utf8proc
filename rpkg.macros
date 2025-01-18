@@ -18,6 +18,7 @@ function git_version {
   declare describe tag commits hash
   describe=$(git describe --tags --first-parent --long origin/master)
   read tag commits hash <<<"${describe//-/ }"
+  hash=${hash#g} # git prepends g to indicate git
   [[ $tag == v* && $commits =~ ^[0-9]+$ && -n $hash ]] || abort "failed git describe"
 
   output "$version+git.$commits.$hash"
