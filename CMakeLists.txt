@@ -5,13 +5,13 @@ include (utils.cmake)
 disallow_intree_builds()
 
 # API version - be sure to update utf8proc.h and Makefile, too!
-project (utf8proc VERSION 2.10.0 LANGUAGES C)
+project (utf8proc VERSION 2.11.0 LANGUAGES C)
 
 # This is the ABI version number, which may differ from the
 # API version number (defined in utf8proc.h and above).
 # Be sure to also update these in Makefile and MANIFEST!
 set(SO_MAJOR 3)
-set(SO_MINOR 1)
+set(SO_MINOR 2)
 set(SO_PATCH 0)
 
 option(UTF8PROC_INSTALL "Enable installation of utf8proc" On)
@@ -100,12 +100,15 @@ if(UTF8PROC_ENABLE_TESTING)
   target_link_libraries(printproperty utf8proc)
   add_executable(valid test/tests.h test/tests.c utf8proc.h test/valid.c)
   target_link_libraries(valid utf8proc)
+  add_executable(maxdecomposition test/tests.h test/tests.c utf8proc.h test/maxdecomposition.c)
+  target_link_libraries(maxdecomposition utf8proc)
   add_test(utf8proc.testcase case)
   add_test(utf8proc.testcustom custom)
   add_test(utf8proc.testiterate iterate)
   add_test(utf8proc.testmisc misc)
   add_test(utf8proc.testprintproperty printproperty)
   add_test(utf8proc.testvalid valid)
+  add_test(utf8proc.testmaxdecomposition maxdecomposition)
 
   if (NOT WIN32)
     # no wcwidth function on Windows

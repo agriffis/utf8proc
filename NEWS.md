@@ -1,5 +1,11 @@
 # utf8proc release history #
 
+## Version 2.11.0-alpha ##
+
+TBD — awaiting final Unicode 17 release.
+
+ - Unicode 17 support ([#292]).
+
 ## Version 2.10.0 ##
 
 2024-12-31
@@ -453,3 +459,4 @@ Release of version 1.0.1
 [#253]: https://github.com/JuliaStrings/utf8proc/issues/253
 [#270]: https://github.com/JuliaStrings/utf8proc/issues/270
 [#277]: https://github.com/JuliaStrings/utf8proc/issues/277
+[#292]: https://github.com/JuliaStrings/utf8proc/issues/292
