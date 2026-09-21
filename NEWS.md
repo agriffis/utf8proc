@@ -4,10 +4,19 @@
 
 unreleased
 
- - Unicode 18 support.  This includes the revision of rule GB9c in UAX #29,
-   which no longer requires an `Indic_Conjunct_Break=Consonant` in front of
-   the linker; as a consequence, `U+1CF5`, `U+1CF6`, and `U+11A3A` (which
-   became `InCB=Linker` in Unicode 18) now join with a following consonant.
+ - Unicode 18 support ([#354]).  (This includes the modified grapheme-break rule
+   GB9c in UAX #29, which removes some grapheme breaks for Indic characters).
+
+- `options` arguments are changed from an `enum` to `unsigned int`, since
+  they are generally bitwise "or" of `enum` values; this should be backwards
+  binary compatible ([#353]).
+
+- New `utf8proc_free` function to free memory allocated by utf8proc ([#338]).
+  (You can also use your own memory allocator by calling lower-level APIs.)
+
+- [Zig](https://ziglang.org/learn/build-system/) build scripts ([#351]).
+
+- Minor build-system improvements ([#326], [#327], [#334], [#338]).
 
 ## Version 2.11.3 ##
 
@@ -500,3 +509,10 @@ Release of version 1.0.1
 [#311]: https://github.com/JuliaStrings/utf8proc/issues/311
 [#317]: https://github.com/JuliaStrings/utf8proc/issues/317
 [#323]: https://github.com/JuliaStrings/utf8proc/issues/323
+[#326]: https://github.com/JuliaStrings/utf8proc/issues/326
+[#327]: https://github.com/JuliaStrings/utf8proc/issues/327
+[#334]: https://github.com/JuliaStrings/utf8proc/issues/334
+[#338]: https://github.com/JuliaStrings/utf8proc/issues/338
+[#351]: https://github.com/JuliaStrings/utf8proc/issues/351
+[#353]: https://github.com/JuliaStrings/utf8proc/issues/353
+[#354]: https://github.com/JuliaStrings/utf8proc/issues/354
