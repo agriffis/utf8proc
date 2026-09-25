@@ -2,14 +2,18 @@
 
 ## Version 2.12.0 ##
 
-unreleased
+2026-09-25
 
- - Unicode 18 support ([#354]).  (This includes the modified grapheme-break rule
-   GB9c in UAX #29, which removes some grapheme breaks for Indic characters).
+- Unicode 18 support ([#354]).  (This includes the modified grapheme-break rule
+   GB9c in UAX #29, which removes some grapheme breaks for Indic characters.)
 
 - `options` arguments are changed from an `enum` to `unsigned int`, since
   they are generally bitwise "or" of `enum` values; this should be backwards
   binary compatible ([#353]).
+
+- `int *last_boundclass` parameter of `utf8proc_decompose_char` is changed to
+  a `utf8proc_int32_t *` (affecting only rare systems where `int` is not 32 bits, on
+  which the `last_boundclass` argument would have produced incorrect results) ([#363]).
 
 - New `utf8proc_free` function to free memory allocated by utf8proc ([#338]).
   (You can also use your own memory allocator by calling lower-level APIs.)
@@ -24,7 +28,7 @@ unreleased
 
 - [Zig](https://ziglang.org/learn/build-system/) build scripts ([#351]).
 
-- Minor build-system improvements ([#326], [#327], [#334], [#338]).
+- Minor build-system improvements ([#326], [#327], [#334]).
 
 ## Version 2.11.3 ##
 
@@ -526,3 +530,4 @@ Release of version 1.0.1
 [#353]: https://github.com/JuliaStrings/utf8proc/issues/353
 [#354]: https://github.com/JuliaStrings/utf8proc/issues/354
 [#355]: https://github.com/JuliaStrings/utf8proc/issues/355
+[#363]: https://github.com/JuliaStrings/utf8proc/issues/363
